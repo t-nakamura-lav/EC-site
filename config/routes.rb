@@ -8,11 +8,11 @@ Rails.application.routes.draw do
   }
 
   # Top画面
-  root 'customers/items#top'
-  get 'items' => 'customers/items#about'
+  root 'public/items#top'
+  get 'items' => 'public/items#about'
 
   # customer側のルーティング設定
-  namespace :customers do
+  namespace :public do
     get '/search' => 'search#search'
 
     resources :items, only: [:index, :show]
