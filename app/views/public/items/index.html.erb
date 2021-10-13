@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 text-left">
+      <p><strong style="background-color: #eeeeee; font-size: 25px;">商品一覧</strong>（全<%= @items.count %>件）</p>
+    </div>
+  </div>
+  
+  <% @items.each do |item| %>
+    <ul class="main-item-list">
+      <li class="item">
+        <section class="card" >
+          <%= link_to customers_item_path(item.id) do %>
+            <%= attachment_image_tag item, :image, :fill, 200, 130, format: 'jpeg', fallback: "no_image.jpg", size: "200x130" %>
+          <% end %>
+          <div class="card-content">
+            <strong><p class="card-title"><%= item.name %></p></strong>
+            <strong><p class="card-text">￥<%= item.price.to_s(:delimited) %></p></strong>
+          </div>
+        </section>
+      </li>
+    </ul>
+  <% end %> 
+</div>
+      
+<%#= paginate @items %>
