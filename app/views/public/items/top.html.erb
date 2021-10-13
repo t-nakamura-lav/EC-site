@@ -6,37 +6,7 @@
       <p>このサイトは、香水販売の<strong>EC</strong>サイトになります。</p>
       <p>会員でない方も商品の閲覧はできますが、</p>
       <p>購入には会員登録が必要になります。</p>
-      
-      <h2 style="background-color: #eeeeee; col-md-5">人気商品</h2>
-      <div class="row mt-3">
-        <% @items.last(6).each do |item| %>
-          <div class="col-md-2.5" style="margin-left: 80px;">
-            <div class="row">
-              <div class="col-md-12 text-left">
-                <%= link_to customers_item_path(item.id) do %>
-                  <%= attachment_image_tag item, :image, :fill, 170, 100, format: 'jpeg',size: "170x100" %>
-                <% end %>
-              </div>
-            </div>
-          <div class="row">
-            <div class="col-md-12 text-left" style="margin-top: 20px;">
-              <strong><p><%= item.name %></p></strong>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 text-left">
-              <strong><p>￥<%= item.price.to_s(:delimited) %></p></strong>
-            </div>
-          </div>
-        </div>
-        <% end %>
-      </div>
 
-      <div class="row">
-        <div class="col-md-11">
-         <div class="text-right"><%= link_to "全ての商品を見る", public_items_path %></div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

@@ -6,7 +6,7 @@
         <div class="navbar mt-4 nav-left" id="navbarToggleExternalContent">
           <% if customer_signed_in? %>
             <%= link_to 'My Page' ,class: "btn btn-outline-light nav-menu-text btn-sm" %>
-            <%= link_to ' Item ', class: "btn btn-outline-light nav-menu-text ms-4 btn-sm" %>
+            <%= link_to ' Item ', public_items_path, class: "btn btn-outline-info nav-menu-text ms-4 btn-sm" %>
             <%= link_to '　Cart　', class: "btn btn-outline-light ms-4 btn-sm" %>
             <%= link_to 'Logout', destroy_customer_session_path, method: :delete, class: "btn btn-outline-info nav-menu-text ms-4 me-4 btn-sm" %>
           <% elsif admin_signed_in? %>

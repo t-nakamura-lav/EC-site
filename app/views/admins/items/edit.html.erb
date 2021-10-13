@@ -1,9 +1,9 @@
 <div class="container mt-5 mb-5">
   <div class="row mb-4">
-    <h5 class="two-line-heading">新規商品登録</h5>
+    <h5 class="two-line-heading">商品編集</h5>
   </div>
 
-  <%= form_with model: @item, url:admins_items_path, local: true do |f| %>
+  <%= form_with model: @item, url:admins_item_path(@item.id), local: true do |f| %>
     <div class="form_group row ml-10 mb-2">
       <%= f.label :商品画像, class:"col-sm-2 col-form-label" %>
         <div class="col-sm-10">
@@ -21,14 +21,14 @@
     <div class="form_group row ml-10 mb-2">
       <%= f.label :商品説明, class:"col-sm-2 col-form-label" %>
       <div class="col-sm-10">
-        <%= f.text_area :introduction, size:"60x10" %>
+        <%= f.text_area :caption, size:"60x10" %>
       </div>
   　 </div>
 
-    <div class="form_group row ml-10 mb-2">
+    <div class="form_group row ml-10 mb-4">
       <%= f.label :ジャンル, class:"col-sm-2 col-form-label"%>
-      <div class="col-sm-10">
-        <%= f.select :genre_id, @genres.map{ |genre| [genre.name, genre.id] }, {}, style:"width: 120px", class:"form-control" %>
+      <div>
+        <%= f.select :genre_id, @genres.map{ |genre| [genre.name, genre.id] }, {}, style:"width: 120px", class:"form-control ml-3" %>
       </div>
   　</div>
 
@@ -37,10 +37,10 @@
       <div class="col-sm-10">
         <%= f.text_field :price %>円
       </div>
-  　</div>
+  　 </div>
 
     <div class="col text-center">
-      <%= f.submit '新規登録', class:"btn-flat-success"%>
+      <%= f.submit '変更を保存', class:"btn-flat-success ml-4"%>
     </div>
   <% end %>
 </div>

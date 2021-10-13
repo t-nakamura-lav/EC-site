@@ -7,10 +7,9 @@ class Admins::ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    hiragana(@item)
     if @item.save
       flash[:notice] = "商品の新規登録が完了しました"
-     redirect_to admin_items_path
+     redirect_to admins_items_path
     else
       @genres = Genre.all
       render :new
@@ -23,7 +22,6 @@ class Admins::ItemsController < ApplicationController
 
   def show
     @item = Item.find(params[:id])
-    @cart_item = CartItem.new
   end
 
   def edit
@@ -34,10 +32,9 @@ class Admins::ItemsController < ApplicationController
   def update
     @item = Item.find(params[:id])
     if @item.update(item_params)
-      hiragana(@item)
       @item.save
       flash[:notice] = "商品情報の更新が完了しました"
-      redirect_to admin_items_path
+      redirect_to admins_items_path
     else
       @genres = Genre.all
       render :edit
@@ -47,18 +44,7 @@ class Admins::ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name,:caption,:price,:item_image,:is_active,:genre_id)
-  end
-
-  def hiragana(item)
-    num = item.name.delete("^0-9")
-    if item.name.match(/[一-龠々]/)
-      item.conversion_title = item.name.to_kanhira.to_roman + num
-    elsif item.name.is_hira? || item.name.is_kana?
-      item.conversion_title = item.name.to_roman + num
-    else
-      item.conversion_title = item.name + num
-    end
+    params.require(:item).permit(:name, :introduction, :price, :image, :is_active, :genre_id)
   end
 
 end
