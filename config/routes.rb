@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  
   # Customer側devise
   devise_for :customers, controllers: {
     sessions: 'customers/sessions',
@@ -16,6 +17,16 @@ Rails.application.routes.draw do
   # Top画面
   root 'public/items#top'
   get 'items' => 'public/items#about'
+  
+  # Admin側のルーティング設定 
+  namespace :admin do
+    get "homes/top" => "homes#top"
+    resources :items
+    resources :customers
+    resources :orders,only: [:show, :update]
+    resources :genres,only: [:index,:create,:edit,:update]
+    resources :order_details,only: [:update]
+  end
 
   # customer側のルーティング設定
   namespace :public do
