@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col mt-3"><h5 class="two-line-heading">商品一覧</h5></div>
+
+    <div class="btn-circle text-right">
+      <div class="btn-outside">
+        <div class="btn-text"><span class="fas fa-plus"></span></div>
+        <div class="btn-click">
+          <%= link_to "Add Item", new_admins_item_path %>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-hover w-100">
+      <thead>
+        <tr>
+          <th>商品ID</th>
+          <th>商品名</th>
+          <th>税抜価格</th>
+          <th>ジャンル</th>
+          <th>ステータス</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @items.each do |item| %>
+        <tr>
+          <td><%= item.id %></td>
+          <td><%= link_to item.name, admin_item_path(item), class:"link_animation" %></td>
+          <td><%= number_to_currency(item.price, unit: "円", strip_insignificant_zeros: true) %></td>
+          <td><%= item.genre.name %></td>
+          <% if item.is_active %>
+            <td class="text-success">販売中</td>
+          <% else %>
+            <td class="text-secondary">販売停止</td>
+          <% end %>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @items %>
+  </div>
+</div>

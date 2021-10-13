@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row mt-5">
+    <h5 class="two-line-heading">ジャンル編集</h5>
+  </div>
+  <div class="row mt-5">
+    <div class="col">
+      <%= form_with model: @genre, url: admins_genre_path(@genre.id), class:"form-inline", local: true do |f| %>
+        <%= f.label :name, "ジャンル名", class:"form-group ml-1" %>
+        <%= f.text_field :name, class:"form-group ml-5", placeholder: "ジャンル名" %>
+        <%= f.submit '変更を保存', class:'btn-flat-success ml-5' %>
+      <% end %>
+    </div>
+  </div>
+</div>
