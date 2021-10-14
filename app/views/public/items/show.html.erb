@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+      <%#= render "public/homes/genre_search", genres: @genres %>
+    </div>
+
+    <div class="col-9 mt-5">
+      <div class="items_view">
+        <div class="row g-0">
+          <div class="col-8">
+            <%= attachment_image_tag @item, :image, class:"item_image" %>
+          </div>
+
+          <div class="col-4 p-3 item_contents">
+            <h3 style="border-bottom: 1px solid black"><%= @item.name %></h3>
+            <p class="mt-3 mb-5"><%= @item.introduction %></p>
+                <!--数値を通貨のフォーマットに変換-->
+            <h5><%= number_to_currency(@item.tax_include, unit: "¥", strip_insignificant_zeros: true, format: "%u%n") %>(税込)</h5>
+
+              <% if customer_signed_in? %>
+                <%= form_with model: @cart_item, url: public_cart_items_path, local: true do |f| %>
+                  <%= f.hidden_field :item_id, value: @item.id %>
+                  <%= f.select :amount, [1,2,3,4,5,6,7,8,9,10], {}, class:"form-control mb-3", :prompt => "個数選択" %>
+                  <%= f.submit "カートに入れる", class:"btn btn-outline-success btn-block" %>
+                <% end %>
+              <% else %>
+                <p style="color:#008000">購入手続きに進むにはログインしてください。</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
