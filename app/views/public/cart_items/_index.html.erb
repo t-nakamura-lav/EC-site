@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="d-flex mx-auto col-10">
+    <h5 class="two-line-heading mt-5 mt-lg-0">ショッピングカート</h5>
+    <div class="ml-auto">
+　　　 <%= link_to "カートを空にする",all_destroy_public_cart_items_path,class: "btn-flat-danger",method: :delete, remote:true %>
+    </div>
+  </div>
+  <div class="mx-auto col-10">
+    <table class="table table-bordered table-inverse">
+      <thead class="thead-light">
+        <tr>
+          <th>商品名</th>
+          <th>単価（税込）</th>
+          <th>数量</th>
+          <th>小計</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!--合計用(sum)-->
+        <% sum = 0 %>
+        <% cart_items.each do |cart_item| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag cart_item.item, :image, class:"cart_item_image" %>
+          　　<%= cart_item.item.name %>
+            </td>
+            <td id="price">
+                  <!--数値を通貨のフォーマットに変換-->
+          　　<h5><%= number_to_currency(cart_item.item.tax_include, unit: "¥", strip_insignificant_zeros: true, format: "%u%n") %></h5>
+            </td>
+            <td>
+              <%= form_with model:cart_item,  url:public_cart_item_path(cart_item.id) do |f| %>
+                <%= f.select :amount, [1,2,3,4,5,6,7,8,9,10], {}, class:"form-control mb-3", :prompt => "個数選択" %>
+                <%= f.submit "変更",class: "btn-flat-success" %>
+              <% end %>
+            </td>
+            <td>
+              <%= cart_item.subtotal.to_s(:delimited) %>
+              <% sum += cart_item.subtotal %>
+            </td>
+            <td>
+              <span>
+                <%= link_to "削除する",public_cart_item_path(cart_item.id), class: "btn-flat-danger",method: :delete, remote:true %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+
+    </table>
+  </div>
+
+  <div class="d-flex mx-auto col-10">
+    <div>
+      <%= link_to "買い物を続ける", root_path,class: "btn-flat-primary" %>
+    </div>
+
+      <table class="table table-bordered col-5 ml-auto">
+        <tbody>
+          <tr>
+            <td class="bg-light">合計金額</td>
+            <td><%= sum.to_s(:delimited) %></td>
+          </tr>
+        </tbody>
+      </table>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="mx-auto">
+     <% if cart_items.empty? %>
+      <%= link_to "情報入力へ進む",new_public_order_path,  data: "turbolinks" => false}, class: "btn btn-flat-success disabled" %>
+    <% else %>
+      <%= link_to "情報入力へ進む",new_public_order_path,  data: {"turbolinks" => false}, class: "btn-flat-success" %>
+    <% end %>
+  </div>
+</div>
