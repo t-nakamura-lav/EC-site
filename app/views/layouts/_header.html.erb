@@ -17,7 +17,7 @@
             <%= link_to 'Logout', destroy_admin_session_path, method: :delete, class: "btn btn-outline-light nav-menu-text ms-4 me-4 btn-sm" %>
           <% else %>
             <%= link_to ' About ', items_path, class: "btn btn-outline-info btn-sm" %>
-            <%= link_to ' Item ',class: "btn btn-outline-light ms-4 btn-sm" %>
+            <%= link_to ' Item ', public_items_path, class: "btn btn-outline-light ms-4 btn-sm" %>
             <%= link_to ' Signup ', new_customer_registration_path,class: "btn btn-outline-info ms-4 btn-sm" %>
             <%= link_to ' Login ', new_customer_session_path,class: "btn btn-outline-info ms-4 btn-sm" %>
           <% end %>

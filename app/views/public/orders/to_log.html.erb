@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="row">
+    <h5 class="two-line-heading">注文情報確認</h5>
+  </div>
+
+  <div class="row">
+    <div class="col-8">
+
+      <table class="table table-bordered">
+        <thead>
+          <th>商品</th>
+          <th width="120">単価(税込)</th>
+          <th width="100">数量</th>
+          <th width="100">小計</th>
+        </thead>
+        <tbody>
+          <% sum = 0 %>
+          <% @cart_items.each do |cart_item| %>
+            <tr>
+              <td>
+                <div class="d-inline-flex"><%= attachment_image_tag cart_item.item, :image, :fill, 80, 80, format: 'jpeg', fallback: "no_image.jpg" %></div>
+                <div class="d-inline-flex align-top"><%= cart_item.item.name %></div>
+              </td>
+              <td><%= cart_item.item.tax_include.to_s(:delimited) %></td>
+              <td><%= cart_item.amount %></td>
+              <td><%= (cart_item.item.tax_include* cart_item.amount).to_s(:delimited) %></td>
+              <% sum += cart_item.subtotal %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-4">
+      <table class="table table-bordered">
+        <tr>
+          <th>商品合計</th>
+          <td><%= sum.to_s(:delimited) %></td>
+        </tr>
+        <tr>
+          <th>配送料</th>
+          <td><%= 800 %></td>
+        </tr>
+        <tr>
+          <th>ご請求額</th>
+          <td><%= (sum+800).to_s(:delimited) %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-8">
+      <table>
+        <tbody>
+          <tr>
+            <td class="col-4">支払方法</td>
+            <td class="col-9"><%= @order.payment_method %></td>
+          </tr>
+          <tr>
+            <td class="col-4 align-top">お届け先</td>
+            <% if @address_status == "0" %>
+              <td class="col-9"><%= Customer.find(current_customer.id).join_address %></br>
+              <%= Customer.find(current_customer.id).join_name %></td>
+            <% else %>
+              <td class="col-9"><%= "〒 #{@address.postcode} #{@address.address} #{@address.address_name}" %></td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row d-flex justify-content-center mt-4">
+
+    <%= form_with model:@order,  url:public_orders_path, local:true do |f| %>
+      <%= f.hidden_field :payment_method %>
+      <%= f.hidden_field :address_status %>
+      <%= f.hidden_field :address_id %>
+      <%=f.fields_for @address do |i| %>
+        <%= i.hidden_field :postcode %>
+        <%= i.hidden_field :address %>
+        <%= i.hidden_field :address_name %>
+      <% end %>
+      <div class="actions">
+        <%= f.submit "注文を確定する",class: "btn-flat-success" %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
