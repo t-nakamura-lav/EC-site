@@ -2,7 +2,7 @@
   <div class="d-flex mx-auto col-10">
     <h5 class="two-line-heading mt-5 mt-lg-0">ショッピングカート</h5>
     <div class="ml-auto">
-　　　 <%= link_to "カートを空にする",all_destroy_public_cart_items_path,class: "btn-flat-danger",method: :delete, remote:true %>
+      <%= link_to "カートを空にする",all_destroy_public_cart_items_path,class: "btn-flat-danger",method: :delete, remote:true %>
     </div>
   </div>
   <div class="mx-auto col-10">
@@ -24,11 +24,11 @@
           <tr>
             <td>
               <%= attachment_image_tag cart_item.item, :image, class:"cart_item_image" %>
-          　　<%= cart_item.item.name %>
+              <%= cart_item.item.name %>
             </td>
             <td id="price">
                   <!--数値を通貨のフォーマットに変換-->
-          　　<h5><%= number_to_currency(cart_item.item.tax_include, unit: "¥", strip_insignificant_zeros: true, format: "%u%n") %></h5>
+              <h5><%= number_to_currency(cart_item.item.tax_include, unit: "¥", strip_insignificant_zeros: true, format: "%u%n") %></h5>
             </td>
             <td>
               <%= form_with model:cart_item,  url:public_cart_item_path(cart_item.id) do |f| %>
@@ -71,10 +71,10 @@
 
 <div class="row">
   <div class="mx-auto">
-     <% if cart_items.empty? %>
-      <%= link_to "情報入力へ進む",new_public_order_path,  data: "turbolinks" => false}, class: "btn btn-flat-success disabled" %>
+    <% if cart_items.empty? %>
+      <%= link_to "情報入力へ進む",new_public_order_path, data: {"turbolinks" => false}, class: "btn btn-flat-success disabled" %>
     <% else %>
-      <%= link_to "情報入力へ進む",new_public_order_path,  data: {"turbolinks" => false}, class: "btn-flat-success" %>
+      <%= link_to "情報入力へ進む",new_public_order_path, data: {"turbolinks" => false}, class: "btn-flat-success" %>
     <% end %>
   </div>
 </div>

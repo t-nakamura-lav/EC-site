@@ -19,13 +19,13 @@ class Public::CartItemsController < ApplicationController
   # items/show カートに入れるボタン
   def create
     @cart_item = current_customer.cart_items.new(cart_item_params)
-    if @cart_item.amount.nill?
-      @cart_item.save
+    if @cart_item.save
       flash[:notice] = "カートに追加しました"
       redirect_to public_cart_items_path
     else
-      flash[:notice] = "カートに商品を入れてください"
-      redirect_to public_item_path(@cart_item.item)
+      @item = Item.find_by(id: @cart_item.item_id)
+      @genres = Genre.all
+      render "public/items/show"
     end
   end
 
@@ -37,13 +37,11 @@ class Public::CartItemsController < ApplicationController
   end
 
   # カート内商品を全て削除
-  def destroy_all
-    cart_items=CartItem.where(customer_id: current_customer)
-    @cart_item=CartItem.new
-    cart_items.each do |cart_item|
-      cart_item.destroy
-    end
-    @cart_items=CartItem.where(customer_id: current_customer)
+  def all_destroy
+    @cart_items = current_customer.cart_items
+    @cart_items.destroy_all
+    flash[:notice] = 'カートを空にしました'
+    # redirect_to public_cart_items_path
   end
 
 
