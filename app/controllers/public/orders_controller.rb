@@ -2,6 +2,7 @@ class Public::OrdersController < ApplicationController
 
   def new
     @order=Order.new
+    @address=Address.new
   end
 
   def to_log
@@ -90,7 +91,7 @@ class Public::OrdersController < ApplicationController
   end
 
   def address_params
-    params.require(:address).permit(shipping_address:[:postcode, :address, :address_name])
+    params.require(:address).permit(address:[:postcode, :address, :address_name])
   end
 
 

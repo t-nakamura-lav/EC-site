@@ -9,7 +9,7 @@ class Admins::ItemsController < ApplicationController
     @item = Item.new(item_params)
     if @item.save
       flash[:notice] = "商品の新規登録が完了しました"
-     redirect_to admins_items_path
+      redirect_to admins_items_path
     else
       @genres = Genre.all
       render :new
