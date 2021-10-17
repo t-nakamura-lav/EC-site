@@ -61,7 +61,8 @@
                 <tr>
                   <th class="table-secondary">送料</th>
                   <th>
-                    <%= 800 %>
+                    <%= @postage %>
+                    <%= f.hidden_field :shipping, value: @postage %>
                     </th>
                 </tr>
                 <tr>
@@ -72,7 +73,7 @@
                 <tr>
                   <th class="table-secondary">請求金額</th>
                   <th>
-                    <% @total = @sum + 800 %>
+                    <% @total = @sum + @postage %>
                     <%= @total.to_s(:delimited) %>
                     <%= f.hidden_field :total_price, value: @total %>
                   </th>

@@ -8,15 +8,19 @@ class Public::OrdersController < ApplicationController
   def to_log
     @orders = Order.all
     @order = Order.new(order_params)
+    @postage = 800 
+    # 配送先(0:自宅)
     if params[:order][:address_status] == "0"
       @order.postcode = current_customer.postcode
       @order.address = current_customer.address
       @order.address_name = current_customer.name
+    # 配送先(1:既存配送先)
     elsif params[:order][:address_status] == "1"
       @address = Address.find(params[:order][:address_id])
       @order.postcode = @address.postcode
       @order.address = @address.address
       @order.address_name = @address.address_name
+    # 配送先(2:新規配送先)
     elsif params[:order][:address_status] == "2"
       @order.postcode = params[:order][:postcode]
       @order.address = params[:order][:address]
@@ -34,7 +38,6 @@ class Public::OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     @order.customer_id = current_customer.id
-    @order_status = "入金待ち"
     @order.total_price = params[:order][:total_price]
     @order.save
     @cart_items = current_customer.cart_items
@@ -43,7 +46,6 @@ class Public::OrdersController < ApplicationController
         item_id: cart_item.item.id,
         order_id: @order.id,
         amount: cart_item.amount,
-        #sub_price: cart_item.item.price
       )
     end
     @cart_items.destroy_all
