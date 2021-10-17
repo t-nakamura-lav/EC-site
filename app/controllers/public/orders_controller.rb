@@ -1,70 +1,53 @@
 class Public::OrdersController < ApplicationController
 
   def new
-    @order=Order.new
-    @address=Address.new
+    @order = Order.new
+    @address = Address.new
   end
 
   def to_log
-    @cart_items=CartItem.where(customer_id:current_customer.id)
-    @order=Order.new(order_params)
-    @shipping_sel=order_params[:shipping_sel]
-    @shipping_address_id=order_params[:shipping_address_id]
-    # 配送先（0：自宅、1:既存配送先、2:新規配送先）
-    if @shipping_sel == "0"
-      @shipping_address=ShippingAddress.new
-    elsif @shipping_sel == "1"
-      @shipping_address=ShippingAddress.find(@shipping_address_id)
-    else
-      @shipping_address=ShippingAddress.new(shipping_address_params[:shipping_address])
-      @shipping_address.customer_id=current_customer.id
-      render :information if @shipping_address.invalid?
+    @orders = Order.all
+    @order = Order.new(order_params)
+    if params[:order][:address_status] == "0"
+      @order.postcode = current_customer.postcode
+      @order.address = current_customer.address
+      @order.address_name = current_customer.name
+    elsif params[:order][:address_status] == "1"
+      @address = Address.find(params[:order][:address_id])
+      @order.postcode = @address.postcode
+      @order.address = @address.address
+      @order.address_name = @address.address_name
+    elsif params[:order][:address_status] == "2"
+      @order.postcode = params[:order][:postcode]
+      @order.address = params[:order][:address]
+      @order.address_name = params[:order][:address_name]
+    #カスタマーの住所登録と入力内容の確認
+      @address = current_customer.addresses.build
+      @address.postcode = params[:order][:postcode]
+      @address.address = params[:order][:address]
+      @address.address_name = params[:order][:address_name]
+      @address.save
     end
+    @cart_items = current_customer.cart_items
   end
 
   def create
-    # 新規の場合配送先登録
-    @shipping_sel=order_params[:shipping_sel]
-    @shipping_address_id=order_params[:shipping_address_id]
-    if @shipping_sel == "2"
-      @shipping_address=ShippingAddress.new(shipping_address_params[:shipping_address])
-      @shipping_address.customer_id=current_customer.id
-      render :information and return if params[:back] || !@shipping_address.save
-      @shipping_address_id=@shipping_address.id.to_s
-    else
-      @shipping_address=ShippingAddress.new
-    end
-    # オーダー情報登録
     @order = Order.new(order_params)
-    @order.total_price = 0
-    if @shipping_sel == "0"
-      @order.postcode = Customer.find(current_customer.id).postcode
-      @order.address = Customer.find(current_customer.id).address
-      @order.address_name = Customer.find(current_customer.id).join_name
-    else
-      @shipping_address=ShippingAddress.find(@shipping_address_id)
-      @order.postcode = @shipping_address.postcode
-      @order.address = @shipping_address.address
-      @order.address_name = @shipping_address.address_name
-    end
-    render :information and return if params[:back] || !@order.save
-    # オーダー詳細登録
-    total_price = 0
-    @cart_items=CartItem.where(customer_id: current_customer.id)
-    @cart_items.each do |cart_item|
-      @order_detail=OrderDetail.new
-      @order_detail.order_id=@order.id
-      @order_detail.item_id=cart_item.item_id
-      @order_detail.quantity=cart_item.quantity
-      @order_detail.price=Item.find(@order_detail.item_id).tax_include * cart_item.quantity
-      @order_detail.save
-      cart_item.destroy
-      total_price += @order_detail.price
-    end
-    #商品合計アップデート
-    @order.total_price = total_price
+    @order.customer_id = current_customer.id
+    @order_status = "入金待ち"
+    @order.total_price = params[:order][:total_price]
     @order.save
-    redirect_to thankyou_orders_path
+    @cart_items = current_customer.cart_items
+    @cart_items.each do |cart_item|
+      OrderDetail.create(
+        item_id: cart_item.item.id,
+        order_id: @order.id,
+        amount: cart_item.amount,
+        #sub_price: cart_item.item.price
+      )
+    end
+    @cart_items.destroy_all
+    redirect_to thanx_public_orders_path
   end
 
   def index
@@ -87,11 +70,7 @@ class Public::OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:payment_method,:shipping_sel,:shipping_address_id).merge(customer_id: current_customer.id ,postage: 800)
-  end
-
-  def address_params
-    params.require(:address).permit(address:[:postcode, :address, :address_name])
+    params.require(:order).permit(:address, :postcode, :address_name, :payment_method, :total_price, :postage)
   end
 
 
