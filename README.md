@@ -1,25 +1,5 @@
-# README
+# Fragrancees Shop
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# Tama
+「Fragrancees Shop」は全国発送可能な香水販売サイトです。  
+きっとあなたに合うすてきな香りが見つかるはず・・・♪  
+最短翌日発送で、すぐに香りをお届けできます。
